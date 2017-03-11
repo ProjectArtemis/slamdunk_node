@@ -96,14 +96,14 @@ namespace
             , m_rightGrayscalePublisher(image_transport::ImageTransport(n).advertiseCamera("right_grayscale/image", 1))
             , m_pointCloud2Publisher(n.advertise<sensor_msgs::PointCloud2>("pcl_xyz", 1))
             , m_imuPublisher(n.advertise<sensor_msgs::Imu>("imu", 1))
-            , m_posePublisher(n.advertise<geometry_msgs::PoseStamped>("pose", 1))
-            , m_occupancyPublisher(n.advertise<octomap_msgs::Octomap>("octomap", 1))
+            // , m_posePublisher(n.advertise<geometry_msgs::PoseStamped>("pose", 1))
+            // , m_occupancyPublisher(n.advertise<octomap_msgs::Octomap>("octomap", 1))
             , m_ultrasoundPublisher(n.advertise<sensor_msgs::Range>("ultrasound", 1))
             , m_barometerPublisher(n.advertise<sensor_msgs::FluidPressure>("barometer", 1))
             , m_magnetometerPublisher(n.advertise<sensor_msgs::MagneticField>("magnetometer", 1))
-            , m_processingImageRatePublisher(n.advertise<std_msgs::Float32>("processing_image_rate", 1))
-            , m_keyframePublisher(n.advertise<slamdunk_msgs::BoolStamped>("keyframe", 1))
-            , m_qualityPublisher(n.advertise<slamdunk_msgs::QualityStamped>("quality", 1))
+            //, m_processingImageRatePublisher(n.advertise<std_msgs::Float32>("processing_image_rate", 1))
+            // , m_keyframePublisher(n.advertise<slamdunk_msgs::BoolStamped>("keyframe", 1))
+            // , m_qualityPublisher(n.advertise<slamdunk_msgs::QualityStamped>("quality", 1))
 
         {
             // get the clock_sync_period parameter, defaulting to a period of 10 seconds
@@ -122,13 +122,13 @@ namespace
             onClockOffsetTimerCallback(ros::TimerEvent{});
 
             m_restartCaptureService = n.advertiseService("restart_capture", &Context::restartCaptureServiceCb, this);
-            m_restartSlamService = n.advertiseService("restart_slam", &Context::restartSlamServiceCb, this);
-            m_restartOccupancyService = n.advertiseService("restart_occupancy", &Context::restartOccupancyServiceCb, this);
+            // m_restartSlamService = n.advertiseService("restart_slam", &Context::restartSlamServiceCb, this);
+            // m_restartOccupancyService = n.advertiseService("restart_occupancy", &Context::restartOccupancyServiceCb, this);
             m_restartStreamingService = n.advertiseService("restart_streaming", &Context::restartStreamingServiceCb, this);
 
             m_dynamicReconfigureServer.setCallback(boost::bind(&Context::dynamicReconfigureCb, this, _1, _2));
 
-            menuInit();
+            //menuInit();
         }
 
         void setKalamosContext(kalamos::Context* c);
@@ -139,12 +139,12 @@ namespace
         void depthmapPublish(kalamos::DepthmapData const& dm);
         void dispmapPublish(kalamos::DispmapData const& dm);
         void imuPublish(kalamos::ImuData const& imuData);
-        void posePublish(kalamos::PoseData const& poseData);
-        void occupancyPublish(kalamos::OccupancyData const& occupancyData);
+        // void posePublish(kalamos::PoseData const& poseData);
+        // void occupancyPublish(kalamos::OccupancyData const& occupancyData);
         void ultrasoundPublish(kalamos::UltrasoundData const& ultrasoundData);
         void barometerPublish(kalamos::BarometerData const& barometerData);
         void magnetometerPublish(kalamos::MagnetometerData const& magnetometerData);
-        void processingImageInfoPublish(kalamos::ProcessingImageInfoData const& processingImageInfoData);
+      //  void processingImageInfoPublish(kalamos::ProcessingImageInfoData const& processingImageInfoData);
 
         void onStereoYuvData(kalamos::StereoYuvData const& stereoYuvData);
 
@@ -156,7 +156,7 @@ namespace
         void rightGrayscalePublish(cv::Mat const& grayscaleData, std::uint64_t ts);
 
     private:
-        void menuInit();
+        //void menuInit();
 
         void onNewDepthFrame(const sensor_msgs::ImageConstPtr& depthMap, const sensor_msgs::CameraInfoConstPtr& camInfo);
 
@@ -171,8 +171,8 @@ namespace
 
     private:
         bool restartCapture();
-        bool restartSlam();
-        bool restartOccupancy();
+        // bool restartSlam();
+        // bool restartOccupancy();
         bool restartStreaming();
         // Services
         typedef std_srvs::Empty RestartCaptureSrv;
@@ -180,12 +180,12 @@ namespace
         typedef std_srvs::Empty RestartOccupancySrv;
         typedef std_srvs::Empty RestartStreamingSrv;
         bool restartCaptureServiceCb(RestartCaptureSrv::Request& req, RestartCaptureSrv::Response& resp);
-        bool restartSlamServiceCb(RestartSlamSrv::Request& req, RestartSlamSrv::Response& resp);
-        bool restartOccupancyServiceCb(RestartOccupancySrv::Request& req, RestartOccupancySrv::Response& resp);
+        // bool restartSlamServiceCb(RestartSlamSrv::Request& req, RestartSlamSrv::Response& resp);
+        // bool restartOccupancyServiceCb(RestartOccupancySrv::Request& req, RestartOccupancySrv::Response& resp);
         bool restartStreamingServiceCb(RestartStreamingSrv::Request& req, RestartStreamingSrv::Response& resp);
         ros::ServiceServer m_restartCaptureService;
-        ros::ServiceServer m_restartSlamService;
-        ros::ServiceServer m_restartOccupancyService;
+        // ros::ServiceServer m_restartSlamService;
+        // ros::ServiceServer m_restartOccupancyService;
         ros::ServiceServer m_restartStreamingService;
 
     private:
@@ -199,12 +199,12 @@ namespace
         kalamos::Context* m_kalamosContext = nullptr;
 
         std::unique_ptr<kalamos::ServiceHandle> m_captureHandle;
-        std::unique_ptr<kalamos::ServiceHandle> m_slamHandle;
-        std::unique_ptr<kalamos::ServiceHandle> m_occupancyHandle;
+        // std::unique_ptr<kalamos::ServiceHandle> m_slamHandle;
+        // std::unique_ptr<kalamos::ServiceHandle> m_occupancyHandle;
         std::unique_ptr<kalamos::ServiceHandle> m_streamingHandle;
 
-        tf2::Quaternion m_gravityQuat;
-        bool m_renewGravityQuat = true;
+        // tf2::Quaternion m_gravityQuat;
+        // bool m_renewGravityQuat = true;
 
         /// bitset of services that needs to be restarted (e.g. after a configuration change)
         std::bitset<static_cast<int>(kalamos::ServiceType::SERVICE_TYPE_LAST) + 1> m_dirtyServices;
@@ -226,20 +226,20 @@ namespace
 
         ros::Publisher m_imuPublisher;
 
-        ros::Publisher m_posePublisher;
+        // ros::Publisher m_posePublisher;
         tf2_ros::TransformBroadcaster m_transformBroadcaster;
 
-        ros::Publisher m_occupancyPublisher;
-        octomap::OcTree m_octomapOctree = {kalamos::OccupancyData::RESOLUTION};
+        // ros::Publisher m_occupancyPublisher;
+        // octomap::OcTree m_octomapOctree = {kalamos::OccupancyData::RESOLUTION};
 
         ros::Publisher m_ultrasoundPublisher;
         ros::Publisher m_barometerPublisher;
         ros::Publisher m_magnetometerPublisher;
 
-        ros::Publisher m_processingImageRatePublisher;
+        //ros::Publisher m_processingImageRatePublisher;
 
-        ros::Publisher m_keyframePublisher;
-        ros::Publisher m_qualityPublisher;
+        // ros::Publisher m_keyframePublisher;
+        // ros::Publisher m_qualityPublisher;
 
         // Dynamic reconfigure
         dynamic_reconfigure::Server<slamdunk_node::SLAMDunkNodeConfig> m_dynamicReconfigureServer;
@@ -257,8 +257,8 @@ namespace
         interactive_markers::MenuHandler::EntryHandle m_menuRestartOccupancyHandle;
         interactive_markers::MenuHandler::EntryHandle m_menuRestartStreamingHandle;
         void menuRestartCaptureCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback);
-        void menuRestartSlamCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback);
-        void menuRestartOccupancyCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback);
+        // void menuRestartSlamCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback);
+        // void menuRestartOccupancyCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback);
         void menuRestartStreamingCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback);
         bool m_withBarometer = false;
         bool m_withMagnetometer = false;
@@ -633,91 +633,91 @@ namespace
         m_imuPublisher.publish(imu);
     }
 
-    void Context::posePublish(kalamos::PoseData const& poseData)
-    {
-        if (m_renewGravityQuat)
-        {
-            m_renewGravityQuat = false;
-            // The gravity transform is computed once at the start of the SLAM.
-            // In order to have the SLAM pose in a plane somewhat parallel to the ground,
-            // we use the 'up' vector deduced from the accelerometer.
-            tf2::Vector3 up;
-            for (int i = 0; i < 3; ++i)
-            {
-                up[i] = poseData.up[i];
-            }
-            // we want to compensate the angle,
-            // so we use inverse() to reverse the direction of the rotation
-            m_gravityQuat = tf2::shortestArcQuat(tf2::Vector3(0, 0, 1), up).normalized().inverse();
-        }
+    // void Context::posePublish(kalamos::PoseData const& poseData)
+    // {
+    //     if (m_renewGravityQuat)
+    //     {
+    //         m_renewGravityQuat = false;
+    //         // The gravity transform is computed once at the start of the SLAM.
+    //         // In order to have the SLAM pose in a plane somewhat parallel to the ground,
+    //         // we use the 'up' vector deduced from the accelerometer.
+    //         tf2::Vector3 up;
+    //         for (int i = 0; i < 3; ++i)
+    //         {
+    //             up[i] = poseData.up[i];
+    //         }
+    //         // we want to compensate the angle,
+    //         // so we use inverse() to reverse the direction of the rotation
+    //         m_gravityQuat = tf2::shortestArcQuat(tf2::Vector3(0, 0, 1), up).normalized().inverse();
+    //     }
 
-        // The SLAM is a localisation component, it can produce discrete jumps over time.
-        // For this reason we use the 'map' frame_id for the SLAM pose.
-        // c.f. REP 105 (http://www.ros.org/reps/rep-0105.html#map)
-        geometry_msgs::TransformStamped transform;
-        transform.header.stamp = convertStamp(poseData.ts);
-        transform.header.frame_id = "map";
-        transform.child_frame_id = "cam0";
-        transform.transform.translation.x = poseData.translation[0];
-        transform.transform.translation.y = poseData.translation[1];
-        transform.transform.translation.z = poseData.translation[2];
-        tf2::Quaternion quatRot;
-        quatRot.setW(poseData.quaternion[0]);
-        quatRot.setX(poseData.quaternion[1]);
-        quatRot.setY(poseData.quaternion[2]);
-        quatRot.setZ(poseData.quaternion[3]);
+    //     // The SLAM is a localisation component, it can produce discrete jumps over time.
+    //     // For this reason we use the 'map' frame_id for the SLAM pose.
+    //     // c.f. REP 105 (http://www.ros.org/reps/rep-0105.html#map)
+    //     geometry_msgs::TransformStamped transform;
+    //     transform.header.stamp = convertStamp(poseData.ts);
+    //     transform.header.frame_id = "map";
+    //     transform.child_frame_id = "cam0";
+    //     transform.transform.translation.x = poseData.translation[0];
+    //     transform.transform.translation.y = poseData.translation[1];
+    //     transform.transform.translation.z = poseData.translation[2];
+    //     tf2::Quaternion quatRot;
+    //     quatRot.setW(poseData.quaternion[0]);
+    //     quatRot.setX(poseData.quaternion[1]);
+    //     quatRot.setY(poseData.quaternion[2]);
+    //     quatRot.setZ(poseData.quaternion[3]);
 
-        quatRot = m_gravityQuat * quatRot;
-        tf2::convert(quatRot, transform.transform.rotation);
+    //     quatRot = m_gravityQuat * quatRot;
+    //     tf2::convert(quatRot, transform.transform.rotation);
 
-        m_transformBroadcaster.sendTransform(transform);
+    //     m_transformBroadcaster.sendTransform(transform);
 
-        {
-            geometry_msgs::PoseStampedPtr pose(new geometry_msgs::PoseStamped());
-            pose->header = transform.header;
-            pose->pose.position.x = transform.transform.translation.x;
-            pose->pose.position.y = transform.transform.translation.y;
-            pose->pose.position.z = transform.transform.translation.z;
-            pose->pose.orientation = transform.transform.rotation;
-            m_posePublisher.publish(pose);
-        }
+    //     {
+    //         geometry_msgs::PoseStampedPtr pose(new geometry_msgs::PoseStamped());
+    //         pose->header = transform.header;
+    //         pose->pose.position.x = transform.transform.translation.x;
+    //         pose->pose.position.y = transform.transform.translation.y;
+    //         pose->pose.position.z = transform.transform.translation.z;
+    //         pose->pose.orientation = transform.transform.rotation;
+    //         m_posePublisher.publish(pose);
+    //     }
 
-        {
-            slamdunk_msgs::QualityStampedPtr qualityMsg(new slamdunk_msgs::QualityStamped());
-            qualityMsg->header = transform.header;
-            qualityMsg->quality.value = (uint8_t)poseData.quality;
-            m_qualityPublisher.publish(qualityMsg);
-        }
+    //     {
+    //         slamdunk_msgs::QualityStampedPtr qualityMsg(new slamdunk_msgs::QualityStamped());
+    //         qualityMsg->header = transform.header;
+    //         qualityMsg->quality.value = (uint8_t)poseData.quality;
+    //         m_qualityPublisher.publish(qualityMsg);
+    //     }
 
-        {
-            slamdunk_msgs::BoolStampedPtr keyframeMsg(new slamdunk_msgs::BoolStamped());
-            keyframeMsg->header = transform.header;
-            keyframeMsg->value = poseData.keyframe;
-            m_keyframePublisher.publish(keyframeMsg);
-        }
-    }
+    //     {
+    //         slamdunk_msgs::BoolStampedPtr keyframeMsg(new slamdunk_msgs::BoolStamped());
+    //         keyframeMsg->header = transform.header;
+    //         keyframeMsg->value = poseData.keyframe;
+    //         m_keyframePublisher.publish(keyframeMsg);
+    //     }
+    // }
 
-    void Context::occupancyPublish(kalamos::OccupancyData const& occupancyData)
-    {
-        for (kalamos::OccupancyDataPoint const& occupancyDataPoint : occupancyData.points)
-        {
-            octomap::point3d point(
-                    occupancyDataPoint.position[0],
-                    occupancyDataPoint.position[1],
-                    occupancyDataPoint.position[2]);
-            m_octomapOctree.updateNode(point, occupancyDataPoint.occupied, true);
-        }
-        m_octomapOctree.updateInnerOccupancy();
+    // void Context::occupancyPublish(kalamos::OccupancyData const& occupancyData)
+    // {
+    //     for (kalamos::OccupancyDataPoint const& occupancyDataPoint : occupancyData.points)
+    //     {
+    //         octomap::point3d point(
+    //                 occupancyDataPoint.position[0],
+    //                 occupancyDataPoint.position[1],
+    //                 occupancyDataPoint.position[2]);
+    //         m_octomapOctree.updateNode(point, occupancyDataPoint.occupied, true);
+    //     }
+    //     m_octomapOctree.updateInnerOccupancy();
 
-        octomap_msgs::OctomapPtr octomap(new octomap_msgs::Octomap());
+    //     octomap_msgs::OctomapPtr octomap(new octomap_msgs::Octomap());
 
-        octomap->header.frame_id = "map";
-        octomap->header.stamp = ros::Time::now();
+    //     octomap->header.frame_id = "map";
+    //     octomap->header.stamp = ros::Time::now();
 
-        octomap_msgs::binaryMapToMsg(m_octomapOctree, *octomap);
+    //     octomap_msgs::binaryMapToMsg(m_octomapOctree, *octomap);
 
-        m_occupancyPublisher.publish(octomap);
-    }
+    //     m_occupancyPublisher.publish(octomap);
+    // }
 
     void Context::ultrasoundPublish(kalamos::UltrasoundData const& ultrasoundData)
     {
@@ -784,12 +784,12 @@ namespace
         m_magnetometerPublisher.publish(message);
     }
 
-    void Context::processingImageInfoPublish(kalamos::ProcessingImageInfoData const& processingImageInfoData)
-    {
-        std_msgs::Float32 message;
-        message.data = processingImageInfoData.fps;
-        m_processingImageRatePublisher.publish(message);
-    }
+    // void Context::processingImageInfoPublish(kalamos::ProcessingImageInfoData const& processingImageInfoData)
+    // {
+    //     std_msgs::Float32 message;
+    //     message.data = processingImageInfoData.fps;
+    //     m_processingImageRatePublisher.publish(message);
+    // }
 
     void Context::onStereoYuvData(kalamos::StereoYuvData const& stereoYuvData)
     {
@@ -843,72 +843,72 @@ namespace
             rightGrayscalePublish(*yuvToGrayscale(stereoYuvData.rightYuv, cropSize.width, cropSize.height), stereoYuvData.ts);
     }
 
-    void fillMarkerControl(visualization_msgs::InteractiveMarkerControl* control)
-    {
-        visualization_msgs::Marker marker;
-        marker.type = visualization_msgs::Marker::MESH_RESOURCE;
-        // The STL model crashes on ARM (Bus error),
-        // the mesh file does not seem to produce this issue
-        // marker.mesh_resource = "package://slamdunk_visualization/models/slamdunk.stl";
-        marker.mesh_resource = "package://slamdunk_visualization/models/slamdunk.mesh";
-        marker.mesh_use_embedded_materials = false;
+    // void fillMarkerControl(visualization_msgs::InteractiveMarkerControl* control)
+    // {
+    //     visualization_msgs::Marker marker;
+    //     marker.type = visualization_msgs::Marker::MESH_RESOURCE;
+    //     // The STL model crashes on ARM (Bus error),
+    //     // the mesh file does not seem to produce this issue
+    //     // marker.mesh_resource = "package://slamdunk_visualization/models/slamdunk.stl";
+    //     marker.mesh_resource = "package://slamdunk_visualization/models/slamdunk.mesh";
+    //     marker.mesh_use_embedded_materials = false;
 
-        marker.color.r = 0.1;
-        marker.color.g = 0.1;
-        marker.color.b = 0.1;
-        marker.color.a = 1;
+    //     marker.color.r = 0.1;
+    //     marker.color.g = 0.1;
+    //     marker.color.b = 0.1;
+    //     marker.color.a = 1;
 
-        tf2::Quaternion quat;
-        double yaw = -M_PI / 2;
-        double pitch = 0;
-        double roll = M_PI;
-        quat.setRPY(roll, pitch, yaw);
-        marker.pose.orientation.w = quat.w();
-        marker.pose.orientation.x = quat.x();
-        marker.pose.orientation.y = quat.y();
-        marker.pose.orientation.z = quat.z();
+    //     tf2::Quaternion quat;
+    //     double yaw = -M_PI / 2;
+    //     double pitch = 0;
+    //     double roll = M_PI;
+    //     quat.setRPY(roll, pitch, yaw);
+    //     marker.pose.orientation.w = quat.w();
+    //     marker.pose.orientation.x = quat.x();
+    //     marker.pose.orientation.y = quat.y();
+    //     marker.pose.orientation.z = quat.z();
 
-        marker.pose.position.x = 0;
-        marker.pose.position.y = 0;
-        marker.pose.position.z = 0;
+    //     marker.pose.position.x = 0;
+    //     marker.pose.position.y = 0;
+    //     marker.pose.position.z = 0;
 
-        marker.scale.x = 1;
-        marker.scale.y = 1;
-        marker.scale.z = 1;
+    //     marker.scale.x = 1;
+    //     marker.scale.y = 1;
+    //     marker.scale.z = 1;
 
-        control->markers.push_back(marker);
-    }
+    //     control->markers.push_back(marker);
+    // }
 
-    void Context::menuInit()
-    {
-        m_menuServer.reset(new interactive_markers::InteractiveMarkerServer("menu_topic_ns", "menu_server_id", false));
+    // void Context::menuInit()
+    // {
+    //     m_menuServer.reset(new interactive_markers::InteractiveMarkerServer("menu_topic_ns", "menu_server_id", false));
 
-        m_menuRestartCaptureHandle =
-            m_menuHandle.insert("Restart capture", boost::bind(&Context::menuRestartCaptureCb, this, _1));
-        m_menuRestartSlamHandle =
-            m_menuHandle.insert("Restart slam", boost::bind(&Context::menuRestartSlamCb, this, _1));
-        m_menuRestartOccupancyHandle =
-            m_menuHandle.insert("Restart occupancy", boost::bind(&Context::menuRestartOccupancyCb, this, _1));
-        m_menuRestartStreamingHandle =
-            m_menuHandle.insert("Restart streaming", boost::bind(&Context::menuRestartStreamingCb, this, _1));
+    //     m_menuRestartCaptureHandle =
+    //         m_menuHandle.insert("Restart capture", boost::bind(&Context::menuRestartCaptureCb, this, _1));
+    //     m_menuRestartSlamHandle =
+    //         m_menuHandle.insert("Restart slam", boost::bind(&Context::menuRestartSlamCb, this, _1));
+    //     m_menuRestartOccupancyHandle =
+    //         m_menuHandle.insert("Restart occupancy", boost::bind(&Context::menuRestartOccupancyCb, this, _1));
+    //     m_menuRestartStreamingHandle =
+    //         m_menuHandle.insert("Restart streaming", boost::bind(&Context::menuRestartStreamingCb, this, _1));
 
-        visualization_msgs::InteractiveMarker int_marker;
-        int_marker.header.frame_id = "cam0";
-        int_marker.scale = 1;
-        int_marker.name = "marker0";
+    //     visualization_msgs::InteractiveMarker int_marker;
+    //     int_marker.header.frame_id = "cam0";
+    //     int_marker.scale = 1;
+    //     int_marker.name = "marker0";
 
-        visualization_msgs::InteractiveMarkerControl control;
-        control.interaction_mode = visualization_msgs::InteractiveMarkerControl::MENU;
-        control.always_visible = true;
-        control.name = "Reset control";
-        fillMarkerControl(&control);
-        int_marker.controls.push_back(control);
+    //     visualization_msgs::InteractiveMarkerControl control;
+    //     control.interaction_mode = visualization_msgs::InteractiveMarkerControl::MENU;
+    //     control.always_visible = true;
+    //     control.name = "Reset control";
+    //     fillMarkerControl(&control);
+    //     int_marker.controls.push_back(control);
 
-        m_menuServer->insert( int_marker );
+    //     m_menuServer->insert( int_marker );
 
-        m_menuHandle.apply(*m_menuServer, "marker0");
-        m_menuServer->applyChanges();
-    }
+    //     m_menuHandle.apply(*m_menuServer, "marker0");
+    //     m_menuServer->applyChanges();
+    // }
 
     void Context::onNewDepthFrame(const sensor_msgs::ImageConstPtr& depthMap, const sensor_msgs::CameraInfoConstPtr& camInfo)
     {
@@ -978,36 +978,36 @@ namespace
             return false;
         }
         // octomap is going to be invalid, clear it
-        m_octomapOctree.clear();
-        m_renewGravityQuat = true;
+        //m_octomapOctree.clear();
+        //m_renewGravityQuat = true;
         return m_captureHandle->restart();
     }
 
-    bool Context::restartSlam()
-    {
-        ROS_INFO("restart slam requested...");
-        if (!m_slamHandle)
-        {
-            ROS_INFO("... but slam was not started to begin with");
-            return false;
-        }
-        // octomap is going to be invalid, clear it
-        m_octomapOctree.clear();
-        return m_slamHandle->restart();
-    }
+    // bool Context::restartSlam()
+    // {
+    //     ROS_INFO("restart slam requested...");
+    //     if (!m_slamHandle)
+    //     {
+    //         ROS_INFO("... but slam was not started to begin with");
+    //         return false;
+    //     }
+    //     // octomap is going to be invalid, clear it
+    //     m_octomapOctree.clear();
+    //     return m_slamHandle->restart();
+    // }
 
-    bool Context::restartOccupancy()
-    {
-        ROS_INFO("restart occupancy requested...");
-        if (!m_occupancyHandle)
-        {
-            ROS_INFO("... but occupancy was not started to begin with");
-            return false;
-        }
-        // octomap is going to be invalid, clear it
-        m_octomapOctree.clear();
-        return m_occupancyHandle->restart();
-    }
+    // bool Context::restartOccupancy()
+    // {
+    //     ROS_INFO("restart occupancy requested...");
+    //     if (!m_occupancyHandle)
+    //     {
+    //         ROS_INFO("... but occupancy was not started to begin with");
+    //         return false;
+    //     }
+    //     // octomap is going to be invalid, clear it
+    //     m_octomapOctree.clear();
+    //     return m_occupancyHandle->restart();
+    // }
 
     bool Context::restartStreaming()
     {
@@ -1031,15 +1031,15 @@ namespace
         return restartCapture();
     }
 
-    bool Context::restartSlamServiceCb(RestartSlamSrv::Request& req, RestartSlamSrv::Response& resp)
-    {
-        return restartSlam();
-    }
+    // bool Context::restartSlamServiceCb(RestartSlamSrv::Request& req, RestartSlamSrv::Response& resp)
+    // {
+    //     return restartSlam();
+    // }
 
-    bool Context::restartOccupancyServiceCb(RestartOccupancySrv::Request& req, RestartOccupancySrv::Response& resp)
-    {
-        return restartOccupancy();
-    }
+    // bool Context::restartOccupancyServiceCb(RestartOccupancySrv::Request& req, RestartOccupancySrv::Response& resp)
+    // {
+    //     return restartOccupancy();
+    // }
 
 
     bool Context::restartStreamingServiceCb(RestartStreamingSrv::Request& req, RestartStreamingSrv::Response& resp)
@@ -1052,15 +1052,15 @@ namespace
         restartCapture();
     }
 
-    void Context::menuRestartSlamCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
-    {
-        restartSlam();
-    }
+    // void Context::menuRestartSlamCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
+    // {
+    //     restartSlam();
+    // }
 
-    void Context::menuRestartOccupancyCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
-    {
-        restartOccupancy();
-    }
+    // void Context::menuRestartOccupancyCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
+    // {
+    //     restartOccupancy();
+    // }
 
     void Context::menuRestartStreamingCb(const visualization_msgs::InteractiveMarkerFeedbackConstPtr &feedback)
     {
@@ -1170,30 +1170,30 @@ namespace
 
         publishStaticTfs();
 
-        bool needOccupancy =
-            !!m_occupancyPublisher.getNumSubscribers();
+        // bool needOccupancy =
+        //     !!m_occupancyPublisher.getNumSubscribers();
 
         bool needPointCloud =
             !!m_pointCloud2Publisher.getNumSubscribers();
 
-        bool needSlam = false;
-        switch (m_config.service_trigger_slam)
-        {
-            case slamdunk_msgs::ServiceTrigger::ALWAYS:
-                needSlam = true;
-                break;
+        // bool needSlam = false;
+        // switch (m_config.service_trigger_slam)
+        // {
+        //     case slamdunk_msgs::ServiceTrigger::ALWAYS:
+        //         needSlam = true;
+        //         break;
 
-            case slamdunk_msgs::ServiceTrigger::NEVER:
-                needSlam = false;
-                break;
+        //     case slamdunk_msgs::ServiceTrigger::NEVER:
+        //         needSlam = false;
+        //         break;
 
-            case slamdunk_msgs::ServiceTrigger::ON_DEMAND:
-                needSlam = needOccupancy || needPointCloud
-                    || !!m_posePublisher.getNumSubscribers()
-                    || !!m_keyframePublisher.getNumSubscribers()
-                    || !!m_qualityPublisher.getNumSubscribers();
-                break;
-        }
+        //     case slamdunk_msgs::ServiceTrigger::ON_DEMAND:
+        //         needSlam = needOccupancy || needPointCloud
+        //             || !!m_posePublisher.getNumSubscribers()
+        //             || !!m_keyframePublisher.getNumSubscribers()
+        //             || !!m_qualityPublisher.getNumSubscribers();
+        //         break;
+        // }
 
         bool needStreaming = false;
         switch (m_config.service_trigger_streaming)
@@ -1220,11 +1220,11 @@ namespace
 
             case slamdunk_msgs::ServiceTrigger::NEVER:
                 needCapture = false;
-                if (needSlam)
-                {
-                    ROS_WARN_THROTTLE(6, "SLAM will not start because capture is disabled");
-                    needSlam = false;
-                }
+                // if (needSlam)
+                // {
+                //     ROS_WARN_THROTTLE(6, "SLAM will not start because capture is disabled");
+                //     needSlam = false;
+                // }
                 if (needStreaming)
                 {
                     ROS_WARN_THROTTLE(6, "Streaming will not start because capture is disabled");
@@ -1234,7 +1234,7 @@ namespace
 
             case slamdunk_msgs::ServiceTrigger::ON_DEMAND:
                 needCapture =
-                    needSlam ||
+                    //needSlam ||
                     needStreaming ||
                     !!m_depthmapPublisher.getNumSubscribers() ||
                     !!m_dispmapPublisher.getNumSubscribers() ||
@@ -1247,8 +1247,8 @@ namespace
                     !!m_imuPublisher.getNumSubscribers() ||
                     !!m_ultrasoundPublisher.getNumSubscribers() ||
                     !!m_barometerPublisher.getNumSubscribers() ||
-                    !!m_magnetometerPublisher.getNumSubscribers() ||
-                    !!m_processingImageRatePublisher.getNumSubscribers();
+                    !!m_magnetometerPublisher.getNumSubscribers();
+                    //!!m_processingImageRatePublisher.getNumSubscribers();
                 break;
         }
 
@@ -1278,16 +1278,16 @@ namespace
             }
         }
 
-        if (needSlam && !m_slamHandle)
-        {
-            ROS_INFO("start slam");
-            m_slamHandle = m_kalamosContext->startService(kalamos::ServiceType::SLAM);
-        }
-        if (needOccupancy && !m_occupancyHandle)
-        {
-            ROS_INFO("start occupancy calculation");
-            m_occupancyHandle = m_kalamosContext->startService(kalamos::ServiceType::OCCUPANCY);
-        }
+        // if (needSlam && !m_slamHandle)
+        // {
+        //     ROS_INFO("start slam");
+        //     m_slamHandle = m_kalamosContext->startService(kalamos::ServiceType::SLAM);
+        // }
+        // if (needOccupancy && !m_occupancyHandle)
+        // {
+        //     ROS_INFO("start occupancy calculation");
+        //     m_occupancyHandle = m_kalamosContext->startService(kalamos::ServiceType::OCCUPANCY);
+        // }
 
         if (needPointCloud && !m_pointCloud2DepthSubscriber)
         {
@@ -1299,16 +1299,16 @@ namespace
         if (!needPointCloud && m_pointCloud2DepthSubscriber)
             m_pointCloud2DepthSubscriber = {};
 
-        if (!needOccupancy && m_occupancyHandle)
-        {
-            ROS_INFO("stop occupancy");
-            m_occupancyHandle.reset();
-        }
-        if (!needSlam && m_slamHandle)
-        {
-            ROS_INFO("stop slam");
-            m_slamHandle.reset();
-        }
+        // if (!needOccupancy && m_occupancyHandle)
+        // {
+        //     ROS_INFO("stop occupancy");
+        //     m_occupancyHandle.reset();
+        // }
+        // if (!needSlam && m_slamHandle)
+        // {
+        //     ROS_INFO("stop slam");
+        //     m_slamHandle.reset();
+        // }
         if (!needStreaming && m_streamingHandle)
         {
             ROS_INFO("stop streaming");
@@ -1472,116 +1472,116 @@ int main(int ac, char** av)
 
     nodelet::Loader nodelet(n);
 
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // keyframe_publisher expects the following topics:
-        // - input: Image camera_in, Bool keyframe_in
-        // - output: Image camera_out
-        remappings["image_in"] = ros::names::resolve("depth_map/image");
-        remappings["keyframe_in"] = ros::names::resolve("keyframe");
-        remappings["image_out"] = ros::names::resolve("depth_map/image_kf");
-        nodelet.load(ros::this_node::getName() + "_depth_map_kf", "slamdunk_nodelets/KeyframePublisherNodelet", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // keyframe_publisher expects the following topics:
+    //     // - input: Image camera_in, Bool keyframe_in
+    //     // - output: Image camera_out
+    //     remappings["image_in"] = ros::names::resolve("depth_map/image");
+    //     remappings["keyframe_in"] = ros::names::resolve("keyframe");
+    //     remappings["image_out"] = ros::names::resolve("depth_map/image_kf");
+    //     nodelet.load(ros::this_node::getName() + "_depth_map_kf", "slamdunk_nodelets/KeyframePublisherNodelet", remappings, nargv);
+    // }
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // quality_publisher expects the following topics:
-        // - input: Image camera_in, Bool quality_in
-        // - output: Image camera_out
-        remappings["image_in"] = ros::names::resolve("depth_map/image");
-        remappings["quality_in"] = ros::names::resolve("quality");
-        remappings["image_out"] = ros::names::resolve("depth_map/image_good");
-        nodelet.load(ros::this_node::getName() + "_depth_map_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // quality_publisher expects the following topics:
+    //     // - input: Image camera_in, Bool quality_in
+    //     // - output: Image camera_out
+    //     remappings["image_in"] = ros::names::resolve("depth_map/image");
+    //     remappings["quality_in"] = ros::names::resolve("quality");
+    //     remappings["image_out"] = ros::names::resolve("depth_map/image_good");
+    //     nodelet.load(ros::this_node::getName() + "_depth_map_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
+    // }
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // quality_publisher expects the following topics:
-        // - input: Image camera_in, Bool quality_in
-        // - output: Image camera_out
-        remappings["image_in"] = ros::names::resolve("depth_map/image_kf");
-        remappings["quality_in"] = ros::names::resolve("quality");
-        remappings["image_out"] = ros::names::resolve("depth_map/image_kf_good");
-        nodelet.load(ros::this_node::getName() + "_depth_map_kf_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
-    }
+    //     // quality_publisher expects the following topics:
+    //     // - input: Image camera_in, Bool quality_in
+    //     // - output: Image camera_out
+    //     remappings["image_in"] = ros::names::resolve("depth_map/image_kf");
+    //     remappings["quality_in"] = ros::names::resolve("quality");
+    //     remappings["image_out"] = ros::names::resolve("depth_map/image_kf_good");
+    //     nodelet.load(ros::this_node::getName() + "_depth_map_kf_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
+    // }
 
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // keyframe_publisher expects the following topics:
-        // - input: Image camera_in, Bool keyframe_in
-        // - output: Image camera_out
-        remappings["image_in"] = ros::names::resolve("left_rgb/image");
-        remappings["keyframe_in"] = ros::names::resolve("keyframe");
-        remappings["image_out"] = ros::names::resolve("left_rgb/image_kf");
-        nodelet.load(ros::this_node::getName() + "_left_rgb_kf", "slamdunk_nodelets/KeyframePublisherNodelet", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // keyframe_publisher expects the following topics:
+    //     // - input: Image camera_in, Bool keyframe_in
+    //     // - output: Image camera_out
+    //     remappings["image_in"] = ros::names::resolve("left_rgb/image");
+    //     remappings["keyframe_in"] = ros::names::resolve("keyframe");
+    //     remappings["image_out"] = ros::names::resolve("left_rgb/image_kf");
+    //     nodelet.load(ros::this_node::getName() + "_left_rgb_kf", "slamdunk_nodelets/KeyframePublisherNodelet", remappings, nargv);
+    //}
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // quality_publisher expects the following topics:
-        // - input: Image camera_in, Bool quality_in
-        // - output: Image camera_out
-        remappings["image_in"] = ros::names::resolve("left_rgb/image");
-        remappings["quality_in"] = ros::names::resolve("quality");
-        remappings["image_out"] = ros::names::resolve("left_rgb/image_good");
-        nodelet.load(ros::this_node::getName() + "_left_rgb_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // quality_publisher expects the following topics:
+    //     // - input: Image camera_in, Bool quality_in
+    //     // - output: Image camera_out
+    //     remappings["image_in"] = ros::names::resolve("left_rgb/image");
+    //     remappings["quality_in"] = ros::names::resolve("quality");
+    //     remappings["image_out"] = ros::names::resolve("left_rgb/image_good");
+    //     nodelet.load(ros::this_node::getName() + "_left_rgb_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
+    // }
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // quality_publisher expects the following topics:
-        // - input: Image camera_in, Bool quality_in
-        // - output: Image camera_out
-        remappings["image_in"] = ros::names::resolve("left_rgb/image_kf");
-        remappings["quality_in"] = ros::names::resolve("quality");
-        remappings["image_out"] = ros::names::resolve("left_rgb/image_kf_good");
-        nodelet.load(ros::this_node::getName() + "_left_rgb_kf_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
-    }
+    //     // quality_publisher expects the following topics:
+    //     // - input: Image camera_in, Bool quality_in
+    //     // - output: Image camera_out
+    //     remappings["image_in"] = ros::names::resolve("left_rgb/image_kf");
+    //     remappings["quality_in"] = ros::names::resolve("quality");
+    //     remappings["image_out"] = ros::names::resolve("left_rgb/image_kf_good");
+    //     nodelet.load(ros::this_node::getName() + "_left_rgb_kf_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
+    // }
 
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // keyframe_publisher expects the following topics:
-        // - input: Image image_in, Bool keyframe_in
-        // - output: Image image_out
-        remappings["image_in"] = ros::names::resolve("left_rgb_rect/image_rect_color");
-        remappings["keyframe_in"] = ros::names::resolve("keyframe");
-        remappings["image_out"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf");
-        nodelet.load(ros::this_node::getName() + "_left_rgb_rect_kf", "slamdunk_nodelets/KeyframePublisherNodelet", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // keyframe_publisher expects the following topics:
+    //     // - input: Image image_in, Bool keyframe_in
+    //     // - output: Image image_out
+    //     remappings["image_in"] = ros::names::resolve("left_rgb_rect/image_rect_color");
+    //     remappings["keyframe_in"] = ros::names::resolve("keyframe");
+    //     remappings["image_out"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf");
+    //     nodelet.load(ros::this_node::getName() + "_left_rgb_rect_kf", "slamdunk_nodelets/KeyframePublisherNodelet", remappings, nargv);
+    // }
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // quality_publisher expects the following topics:
-        // - input: Image image_in, Bool quality_in
-        // - output: Image image_out
-        remappings["image_in"] = ros::names::resolve("left_rgb_rect/image_rect_color");
-        remappings["quality_in"] = ros::names::resolve("quality");
-        remappings["image_out"] = ros::names::resolve("left_rgb_rect/image_rect_color_good");
-        nodelet.load(ros::this_node::getName() + "_left_rgb_rect_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // quality_publisher expects the following topics:
+    //     // - input: Image image_in, Bool quality_in
+    //     // - output: Image image_out
+    //     remappings["image_in"] = ros::names::resolve("left_rgb_rect/image_rect_color");
+    //     remappings["quality_in"] = ros::names::resolve("quality");
+    //     remappings["image_out"] = ros::names::resolve("left_rgb_rect/image_rect_color_good");
+    //     nodelet.load(ros::this_node::getName() + "_left_rgb_rect_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
+    // }
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // keyframe_publisher expects the following topics:
-        // - input: Image image_in, Bool keyframe_in
-        // - output: Image image_out
-        remappings["image_in"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf");
-        remappings["quality_in"] = ros::names::resolve("quality");
-        remappings["image_out"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf_good");
-        nodelet.load(ros::this_node::getName() + "_left_rgb_rect_kf_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
-    }
+    //     // keyframe_publisher expects the following topics:
+    //     // - input: Image image_in, Bool keyframe_in
+    //     // - output: Image image_out
+    //     remappings["image_in"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf");
+    //     remappings["quality_in"] = ros::names::resolve("quality");
+    //     remappings["image_out"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf_good");
+    //     nodelet.load(ros::this_node::getName() + "_left_rgb_rect_kf_good", "slamdunk_nodelets/GoodframePublisherNodelet", remappings, nargv);
+    // }
 
     {
         nodelet::M_string remappings(ros::names::getRemappings());
@@ -1596,83 +1596,83 @@ int main(int ac, char** av)
         remappings["depth_registered/points"] = ros::names::resolve("pcl_xyzrgb");
         nodelet.load(ros::this_node::getName() + "_xyzrgb", "depth_image_proc/point_cloud_xyzrgb", remappings, nargv);
     }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // dephmap_image_proc/point_cloud_xyzrgb expects the following topics:
-        // - input: depth_registered/image_rect, rgb/image_rect_color and rgb/camera_info
-        // - output: depth_registered/points
-        remappings["rgb/image_rect_color"] = ros::names::resolve("left_rgb_rect/image_rect_color_good");
-        remappings["rgb/camera_info"] = ros::names::resolve("left_rgb_rect/camera_info");
-        remappings["depth_registered/image_rect"] = ros::names::resolve("depth_map/image_good");
-        remappings["depth_registered/points"] = ros::names::resolve("pcl_xyzrgb_good");
-        nodelet.load(ros::this_node::getName() + "_xyzrgb_good", "depth_image_proc/point_cloud_xyzrgb", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // dephmap_image_proc/point_cloud_xyzrgb expects the following topics:
+    //     // - input: depth_registered/image_rect, rgb/image_rect_color and rgb/camera_info
+    //     // - output: depth_registered/points
+    //     remappings["rgb/image_rect_color"] = ros::names::resolve("left_rgb_rect/image_rect_color_good");
+    //     remappings["rgb/camera_info"] = ros::names::resolve("left_rgb_rect/camera_info");
+    //     remappings["depth_registered/image_rect"] = ros::names::resolve("depth_map/image_good");
+    //     remappings["depth_registered/points"] = ros::names::resolve("pcl_xyzrgb_good");
+    //     nodelet.load(ros::this_node::getName() + "_xyzrgb_good", "depth_image_proc/point_cloud_xyzrgb", remappings, nargv);
+    // }
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // dephmap_image_proc/point_cloud_xyzrgb expects the following topics:
-        // - input: depth_registered/image_rect, rgb/image_rect_color and rgb/camera_info
-        // - output: depth_registered/points
-        remappings["rgb/image_rect_color"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf");
-        remappings["rgb/camera_info"] = ros::names::resolve("left_rgb_rect/camera_info");
-        remappings["depth_registered/image_rect"] = ros::names::resolve("depth_map/image_kf");
-        remappings["depth_registered/points"] = ros::names::resolve("pcl_xyzrgb_kf");
-        nodelet.load(ros::this_node::getName() + "_xyzrgb_kf", "depth_image_proc/point_cloud_xyzrgb", remappings, nargv);
-    }
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    //     // dephmap_image_proc/point_cloud_xyzrgb expects the following topics:
+    //     // - input: depth_registered/image_rect, rgb/image_rect_color and rgb/camera_info
+    //     // - output: depth_registered/points
+    //     remappings["rgb/image_rect_color"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf");
+    //     remappings["rgb/camera_info"] = ros::names::resolve("left_rgb_rect/camera_info");
+    //     remappings["depth_registered/image_rect"] = ros::names::resolve("depth_map/image_kf");
+    //     remappings["depth_registered/points"] = ros::names::resolve("pcl_xyzrgb_kf");
+    //     nodelet.load(ros::this_node::getName() + "_xyzrgb_kf", "depth_image_proc/point_cloud_xyzrgb", remappings, nargv);
+    // }
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // dephmap_image_proc/point_cloud_xyzrgb expects the following topics:
-        // - input: depth_registered/image_rect, rgb/image_rect_color and rgb/camera_info
-        // - output: depth_registered/points
-        remappings["rgb/image_rect_color"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf_good");
-        remappings["rgb/camera_info"] = ros::names::resolve("left_rgb_rect/camera_info");
-        remappings["depth_registered/image_rect"] = ros::names::resolve("depth_map/image_kf_good");
-        remappings["depth_registered/points"] = ros::names::resolve("pcl_xyzrgb_kf_good");
-        nodelet.load(ros::this_node::getName() + "_xyzrgb_kf_good", "depth_image_proc/point_cloud_xyzrgb", remappings, nargv);
-    }
+    //     // dephmap_image_proc/point_cloud_xyzrgb expects the following topics:
+    //     // - input: depth_registered/image_rect, rgb/image_rect_color and rgb/camera_info
+    //     // - output: depth_registered/points
+    //     remappings["rgb/image_rect_color"] = ros::names::resolve("left_rgb_rect/image_rect_color_kf_good");
+    //     remappings["rgb/camera_info"] = ros::names::resolve("left_rgb_rect/camera_info");
+    //     remappings["depth_registered/image_rect"] = ros::names::resolve("depth_map/image_kf_good");
+    //     remappings["depth_registered/points"] = ros::names::resolve("pcl_xyzrgb_kf_good");
+    //     nodelet.load(ros::this_node::getName() + "_xyzrgb_kf_good", "depth_image_proc/point_cloud_xyzrgb", remappings, nargv);
+    // }
 
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // pcl_xyzrgb_concat expects the following topics:
-        // - input: PointCloud2 pcl_xyzrgb
-        // - output: PointCloud2 pcldepth_registered/points
-        remappings["pcl_xyzrgb_in"] = ros::names::resolve("pcl_xyzrgb_kf_good");
-        remappings["pcl_xyzrgb_out"] = ros::names::resolve("pcl_xyzrgb_concat");
-        remappings["clear"] = ros::names::resolve("pcl_xyzrgb_concat_clear");
-        remappings["rviz_clear"] = ros::names::resolve("pcl_xyzrgb_concat_rviz_clear");
-        remappings["start"] = ros::names::resolve("pcl_xyzrgb_concat_start");
-        remappings["stop"] = ros::names::resolve("pcl_xyzrgb_concat_stop");
-        remappings["save"] = ros::names::resolve("pcl_xyzrgb_concat_save");
-        nodelet.load(ros::this_node::getName() + "_xyzrgb_concat", "slamdunk_nodelets/PclXYZRGBConcatNodelet", remappings, nargv);
-    }
+    //     // pcl_xyzrgb_concat expects the following topics:
+    //     // - input: PointCloud2 pcl_xyzrgb
+    //     // - output: PointCloud2 pcldepth_registered/points
+    //     remappings["pcl_xyzrgb_in"] = ros::names::resolve("pcl_xyzrgb_kf_good");
+    //     remappings["pcl_xyzrgb_out"] = ros::names::resolve("pcl_xyzrgb_concat");
+    //     remappings["clear"] = ros::names::resolve("pcl_xyzrgb_concat_clear");
+    //     remappings["rviz_clear"] = ros::names::resolve("pcl_xyzrgb_concat_rviz_clear");
+    //     remappings["start"] = ros::names::resolve("pcl_xyzrgb_concat_start");
+    //     remappings["stop"] = ros::names::resolve("pcl_xyzrgb_concat_stop");
+    //     remappings["save"] = ros::names::resolve("pcl_xyzrgb_concat_save");
+    //     nodelet.load(ros::this_node::getName() + "_xyzrgb_concat", "slamdunk_nodelets/PclXYZRGBConcatNodelet", remappings, nargv);
+    // }
 
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        remappings["path"] = ros::names::resolve("path");
-        remappings["path_keyframe"] = ros::names::resolve("path_keyframe");
-        nodelet.load(ros::this_node::getName() + "_pose_to_path", "slamdunk_nodelets/PoseToPathNodelet", remappings, nargv);
-    }
+    //     remappings["path"] = ros::names::resolve("path");
+    //     remappings["path_keyframe"] = ros::names::resolve("path_keyframe");
+    //     nodelet.load(ros::this_node::getName() + "_pose_to_path", "slamdunk_nodelets/PoseToPathNodelet", remappings, nargv);
+    // }
 
-    {
-        nodelet::M_string remappings(ros::names::getRemappings());
-        nodelet::V_string nargv;
+    // {
+    //     nodelet::M_string remappings(ros::names::getRemappings());
+    //     nodelet::V_string nargv;
 
-        // pcl_xyzrgb_record expects the following topics:
-        // - input: PointCloud2 pcl_xyzrgb
-        remappings["pcl_xyzrgb_in"] = ros::names::resolve("pcl_xyzrgb_kf_good");
-        remappings["start"] = ros::names::resolve("pcl_xyzrgb_kf_record_start");
-        remappings["stop"] = ros::names::resolve("pcl_xyzrgb_kf_record_stop");
-        nodelet.load(ros::this_node::getName() + "_xyzrgb_kf_record", "slamdunk_nodelets/PclXYZRGBRecordNodelet", remappings, nargv);
-    }
+    //     // pcl_xyzrgb_record expects the following topics:
+    //     // - input: PointCloud2 pcl_xyzrgb
+    //     remappings["pcl_xyzrgb_in"] = ros::names::resolve("pcl_xyzrgb_kf_good");
+    //     remappings["start"] = ros::names::resolve("pcl_xyzrgb_kf_record_start");
+    //     remappings["stop"] = ros::names::resolve("pcl_xyzrgb_kf_record_stop");
+    //     nodelet.load(ros::this_node::getName() + "_xyzrgb_kf_record", "slamdunk_nodelets/PclXYZRGBRecordNodelet", remappings, nargv);
+    // }
 
     {
         kalamos::Callbacks cbs;
@@ -1681,12 +1681,12 @@ int main(int ac, char** av)
         cbs.dispmapCallback = std::bind(&Context::dispmapPublish, &context, std::placeholders::_1);
         cbs.stereoYuvCallback = std::bind(&Context::onStereoYuvData, &context, std::placeholders::_1);
         cbs.imuCallback = std::bind(&Context::imuPublish, &context, std::placeholders::_1);
-        cbs.poseCallback = std::bind(&Context::posePublish, &context, std::placeholders::_1);
-        cbs.occupancyCallback = std::bind(&Context::occupancyPublish, &context, std::placeholders::_1);
+        //cbs.poseCallback = std::bind(&Context::posePublish, &context, std::placeholders::_1);
+        //cbs.occupancyCallback = std::bind(&Context::occupancyPublish, &context, std::placeholders::_1);
         cbs.ultrasoundCallback = std::bind(&Context::ultrasoundPublish, &context, std::placeholders::_1);
         cbs.barometerCallback = std::bind(&Context::barometerPublish, &context, std::placeholders::_1);
         cbs.magnetometerCallback = std::bind(&Context::magnetometerPublish, &context, std::placeholders::_1);
-        cbs.processingImageInfoCallback = std::bind(&Context::processingImageInfoPublish, &context, std::placeholders::_1);
+        //cbs.processingImageInfoCallback = std::bind(&Context::processingImageInfoPublish, &context, std::placeholders::_1);
 
         cbs.period = 30;
         cbs.periodicCallback = std::bind(&Context::tick, &context);
